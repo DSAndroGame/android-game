@@ -13,29 +13,32 @@ public class MainActivity extends AppCompatActivity {
     private GameView gameView;
     public Button button1;
 
-    public void init (){
-       //gameView=new GameView(this);
-        //setContentView(gameView);
-
-        button1 = (Button) findViewById(R.id.button1);
-        button1.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v){
-                Intent toy= new Intent(MainActivity.this,Game.class);
-                startActivity(toy);
-            }
-                                   }
-        );
-
-
-    }
+    //buttum set Up
+//    public void init (){
+//        //gameView=new GameView(this);
+//        //setContentView(gameView);
+//
+//        button1 = (Button) findViewById(R.id.button1);
+//        button1.setOnClickListener(new View.OnClickListener() {
+//
+//            public void onClick(View v){
+//                Intent toy= new Intent(MainActivity.this,Game.class);
+//                startActivity(toy);
+//                }
+//                }
+//        );
+//
+//
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
 
-        init();
+        //init();
+        gameView=new GameView(this);
+        setContentView(gameView);
 
 
 
