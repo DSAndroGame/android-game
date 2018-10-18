@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
+import android.os.*;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -12,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
 
     private GameView gameView;
     public Button button1;
+
+    private Handler handler = new Handler();
+    private final static long TIMER_INTERVAL = 60;
 
     //buttum set Up
 //    public void init (){
@@ -39,6 +46,20 @@ public class MainActivity extends AppCompatActivity {
         //init();
         gameView=new GameView(this);
         setContentView(gameView);
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask(){
+
+            public void run(){
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        gameView.invalidate();
+                    }
+                });
+
+            }
+        }, 0, TIMER_INTERVAL);
 
 
 
