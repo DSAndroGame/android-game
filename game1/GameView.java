@@ -1,5 +1,6 @@
 package edu.kean.game1;
 
+//Imported packages 
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
