@@ -1,5 +1,6 @@
 package edu.kean.game1;
 
+//Imported packages
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
