@@ -1,9 +1,11 @@
 package edu.kean.game1;
 
-//Imported packages 
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.icu.util.Output;
+import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.graphics.Canvas;
@@ -19,6 +21,7 @@ public class GameView extends View {
     private Bitmap ghost;
     private Bitmap background;
     private Bitmap coins;
+    private Bitmap enemy;
 
     //canvas
     private int canvasHeight;
@@ -31,30 +34,56 @@ public class GameView extends View {
 
     private boolean touch= false;
 
+
+    //Coins
+    private int coinX;
+    private int coinY;
+    private int coinSpeed = 15;
+    private Paint coinPaint= new Paint();
+
+    //enemy
+    private int enemyX;
+    private int enemyY;
+    private int enemySpeed = 15;
+    private Paint enemyPaint= new Paint();
+
+
     //Score
-    private Paint score = new Paint();
+    private Paint scorePaint = new Paint();
+    private int score;
 
     //Level
-    private Paint level = new Paint();
+    private Paint levelPaint = new Paint();
 
     public GameView(Context context){
 
         super(context);
         background= BitmapFactory.decodeResource(getResources(), R.drawable.background1);
         ghost= BitmapFactory.decodeResource(getResources(), R.drawable.ghost);
-        coins= BitmapFactory.decodeResource(getResources(), R.drawable.coin);
 
+        coins= BitmapFactory.decodeResource(getResources(), R.drawable.coin);
+       // enemy= BitmapFactory.decodeResource(getResources(), R.drawable.enemy);
+
+        coinPaint.setAntiAlias(false);
         //Score set up
-        score.setColor(Color.WHITE);
-        score.setTextSize(70);
-        score.setTypeface(Typeface.DEFAULT_BOLD);
-        score.setAntiAlias(true);
+        scorePaint.setColor(Color.WHITE);
+        scorePaint.setTextSize(70);
+        scorePaint.setTypeface(Typeface.DEFAULT_BOLD);
+        scorePaint.setAntiAlias(true);
+
+        //enemy color balls
+        enemyPaint.setColor(Color.WHITE);
 
         //Level Set up
-        score.setColor(Color.WHITE);
-        score.setTextSize(70);
-        score.setTypeface(Typeface.DEFAULT_BOLD);
-        score.setAntiAlias(true);
+        levelPaint.setColor(Color.WHITE);
+        levelPaint.setTextSize(70);
+        levelPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        levelPaint.setAntiAlias(true);
+
+        //size for enemy hits
+
+        enemyPaint.setColor(Color.WHITE);
+        enemyPaint.setTextSize(200);
     }
 
     //Display images on the screen
@@ -66,6 +95,8 @@ public class GameView extends View {
 
 
         canvas.drawBitmap(background,0,0, null);
+
+
 
         //ghost
         //canvas.drawBitmap(ghost,0,300, null);
@@ -89,13 +120,50 @@ public class GameView extends View {
 
         //position of the ghost
         //ghostY= 0;
+        score = 0;
 
         //display coins, score and level on the screen
-       // canvas.drawBitmap(coins,200,300, null);
-        canvas.drawText("Coins: 0", 20, 70, score);
-        canvas.drawText("LVL: 0", 800, 70, score);
+        //canvas.drawBitmap(coins,200,300, null);
+        //Coins
+        coinX -= coinSpeed;
+
+        if(hitCheck(coinX, coinY)){
+            score += 10;
+            coinX = -100;
 
 
+        }
+
+
+        if(coinX < 0){
+
+            coinX = canvasWidth + 10;
+            coinY = (int) Math.floor(Math.random() * (maxGhostY - minGhostY)) + minGhostY;
+
+        }
+
+        canvas.drawBitmap(coins,coinX,coinY, coinPaint);
+
+
+        //canvas.drawBitmap(enemy,400,40, null);
+        canvas.drawText("Coins: "+ score, 20, 70, scorePaint);
+        canvas.drawText("LVL: 1", 800, 70, levelPaint);
+
+        //enemy
+        enemyX -= enemySpeed;
+        if(hitCheck(enemyX, enemyY)){
+            score = 0;
+            enemyX = -100;
+            canvas.drawText("NO!!", 500, 500, enemyPaint);
+
+
+        }
+
+        if(enemyX < 0){
+            enemyX = canvasWidth + 200;
+            enemyY = (int) Math.floor(Math.random() * (maxGhostY - minGhostY)) + minGhostY;
+        }
+        canvas.drawCircle(enemyX, enemyY,40, enemyPaint);
 
     }
 
@@ -107,6 +175,14 @@ public class GameView extends View {
         }
         return true;
 
+    }
+
+    public boolean hitCheck(int x, int y){
+        if (ghostX < x && x < (ghostX + ghost.getWidth()) &&
+                ghostY < y && y < (ghostY + ghost.getHeight())){
+            return true;
+        }
+        return false;
     }
 
 }
